@@ -1,3 +1,5 @@
+This is a fork of [thamdub/terraform-provider-bitbucket](https://github.com/thamdub/terraform-provider-bitbucket) for security purposes only (code review).
+
 # Maintenance status
 
 Unmaintained, maintainers needed! I just took the archived repository, and released it to the Terraform Registry. I'm not a Go developer, so I'll not be able to maintain this repository in the long run. PRs are welcome, and I'll try to merge and release them as frequently as possible.
