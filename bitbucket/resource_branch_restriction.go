@@ -165,7 +165,7 @@ func resourceBranchRestrictionsCreate(d *schema.ResourceData, m interface{}) err
 func resourceBranchRestrictionsRead(d *schema.ResourceData, m interface{}) error {
 	client := m.(*Client)
 
-	branchRestrictionsReq, _ := client.Get(fmt.Sprintf("2.0/repositories/%s/%s/branch-restrictions/%s",
+	branchRestrictionsReq, err := client.Get(fmt.Sprintf("2.0/repositories/%s/%s/branch-restrictions/%s",
 		d.Get("owner").(string),
 		d.Get("repository").(string),
 		url.PathEscape(d.Id()),
@@ -191,6 +191,10 @@ func resourceBranchRestrictionsRead(d *schema.ResourceData, m interface{}) error
 		d.Set("value", branchRestriction.Value)
 		d.Set("users", branchRestriction.Users)
 		d.Set("groups", branchRestriction.Groups)
+	}
+
+	if err != nil {
+		return err
 	}
 
 	return nil
@@ -237,12 +241,13 @@ func resourceBranchRestrictionsExists(d *schema.ResourceData, m interface{}) (bo
 			d.Get("repository").(string),
 			url.PathEscape(d.Id()),
 		))
-		if err != nil {
+
+		if err != nil && branchRestrictionsReq.StatusCode != 404 {
 			panic(err)
 		}
 
 		if branchRestrictionsReq.StatusCode != 200 {
-			return false, err
+			return false, nil
 		}
 
 		return true, nil
