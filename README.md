@@ -27,8 +27,8 @@ Terraform Provider
 Requirements
 ------------
 
--	[Terraform](https://www.terraform.io/downloads.html) 0.12.x
--	[Go](https://golang.org/doc/install) 1.11 (to build the provider plugin)
+-	[Terraform](https://www.terraform.io/downloads.html) 0.12.x or higher
+-	[Go](https://golang.org/doc/install) 1.13 (to build the provider plugin)
 
 Building The Provider
 ---------------------
@@ -54,7 +54,7 @@ Using the provider
 # Configure the Bitbucket Provider
 provider "bitbucket" {
   username = "GobBluthe"
-  password = "idoillusions" # you can also use app passwords
+  password = "idoillusions"
 }
 
 # Manage your repository
@@ -70,6 +70,11 @@ resource "bitbucket_project" "infrastructure" {
   key   = "TERRAFORMPROJ"
 }
 ```
+
+You can also set the following 2 environment variables instead of specifying them in the `provider`:
+
+* `BITBUCKET_USERNAME`
+* `BITBUCKET_PASSWORD`
 
 Developing the Provider
 ---------------------------
