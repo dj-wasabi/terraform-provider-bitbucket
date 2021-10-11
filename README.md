@@ -1,6 +1,7 @@
-This is a fork of [thamdub/terraform-provider-bitbucket](https://github.com/thamdub/terraform-provider-bitbucket) for security purposes only (code review).
 
 # Maintenance status
+
+I forked it from @aeirola and have some fixes applied, seems that repo of @aeirola is also not maintained at all. :(
 
 Unmaintained, maintainers needed! I just took the archived repository, and released it to the Terraform Registry. I'm not a Go developer, so I'll not be able to maintain this repository in the long run. PRs are welcome, and I'll try to merge and release them as frequently as possible.
 
@@ -12,6 +13,7 @@ If you would like Atlassian to take ownership of the provider, you can voice you
 - Maintained by HashiCorp and @cwood with contributions from the community
 - [Archived](https://www.terraform.io/docs/internals/archiving.html) by HashiCorp due not being maintained (likely related to not being published to the registry)
 - Forked and published to [Terraform Registry](https://registry.terraform.io) by @aeirola
+- And forked by me with some various other commits found elsewhere and provided some fixes of my own.
 
 Terraform Provider
 ==================
