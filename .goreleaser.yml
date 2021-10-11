@@ -50,5 +50,9 @@ signs:
 release:
   # If you want to manually examine the release before its live, uncomment this line:
   # draft: true
+  disable: false
+  github:
+      owner: dj-wasabi
+      name: terraform-provider-bitbucket
 changelog:
   skip: true
