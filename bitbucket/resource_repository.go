@@ -93,7 +93,7 @@ func resourceRepository() *schema.Resource {
 			"pipelines_enabled": {
 				Type:     schema.TypeBool,
 				Optional: true,
-				Default:  false,
+				Default:  true,
 			},
 			"fork_policy": {
 				Type:     schema.TypeString,
@@ -316,7 +316,7 @@ func resourceRepositoryRead(d *schema.ResourceData, m interface{}) error {
 
 			d.Set("pipelines_enabled", pipelinesConfig.Enabled)
 		} else if pipelinesConfigReq.StatusCode == 404 {
-			d.Set("pipelines_enabled", false)
+			d.Set("pipelines_enabled", true)
 		}
 
 	}

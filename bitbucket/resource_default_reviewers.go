@@ -26,7 +26,11 @@ func resourceDefaultReviewers() *schema.Resource {
 	return &schema.Resource{
 		Create: resourceDefaultReviewersCreate,
 		Read:   resourceDefaultReviewersRead,
+		// Update: resourceDefaultReviewersUpdate,
 		Delete: resourceDefaultReviewersDelete,
+		Importer: &schema.ResourceImporter{
+			State: schema.ImportStatePassthrough,
+		},
 
 		Schema: map[string]*schema.Schema{
 			"owner": {
@@ -49,6 +53,11 @@ func resourceDefaultReviewers() *schema.Resource {
 		},
 	}
 }
+
+// func resourceDefaultReviewersUpdate(d *schema.ResourceData, m interface{}) error {
+// 	client := m.(*Client)
+
+// }
 
 func resourceDefaultReviewersCreate(d *schema.ResourceData, m interface{}) error {
 	client := m.(*Client)
@@ -92,6 +101,10 @@ func resourceDefaultReviewersRead(d *schema.ResourceData, m interface{}) error {
 			return err
 		}
 
+		if reviewersResponse.StatusCode == 404 {
+			return nil
+		}
+
 		decoder := json.NewDecoder(reviewersResponse.Body)
 		err = decoder.Decode(&reviewers)
 		if err != nil {
@@ -129,6 +142,10 @@ func resourceDefaultReviewersDelete(d *schema.ResourceData, m interface{}) error
 			d.Get("repository").(string),
 			user.(string),
 		))
+
+		if resp.StatusCode == 404 {
+			return nil
+		}
 
 		if err != nil {
 			return err

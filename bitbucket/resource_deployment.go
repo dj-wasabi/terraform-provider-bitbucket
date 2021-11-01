@@ -37,6 +37,12 @@ func resourceDeployment() *schema.Resource {
 			"name": {
 				Type:     schema.TypeString,
 				Required: true,
+				ForceNew: true,
+			},
+			"owner": {
+				Type:     schema.TypeString,
+				Required: true,
+				ForceNew: true,
 			},
 			"stage": {
 				Type:     schema.TypeString,
@@ -75,7 +81,8 @@ func resourceDeploymentCreate(d *schema.ResourceData, m interface{}) error {
 	if err != nil {
 		return err
 	}
-	req, err := client.Post(fmt.Sprintf("2.0/repositories/%s/environments/",
+	req, err := client.Post(fmt.Sprintf("2.0/repositories/%s/%s/environments/",
+		d.Get("owner").(string),
 		d.Get("repository").(string),
 	), bytes.NewBuffer(bytedata))
 
@@ -103,7 +110,8 @@ func resourceDeploymentCreate(d *schema.ResourceData, m interface{}) error {
 func resourceDeploymentRead(d *schema.ResourceData, m interface{}) error {
 
 	client := m.(*Client)
-	req, _ := client.Get(fmt.Sprintf("2.0/repositories/%s/environments/%s",
+	req, _ := client.Get(fmt.Sprintf("2.0/repositories/%s/%s/environments/%s",
+		d.Get("owner").(string),
 		d.Get("repository").(string),
 		d.Get("uuid").(string),
 	))
@@ -143,7 +151,8 @@ func resourceDeploymentUpdate(d *schema.ResourceData, m interface{}) error {
 	if err != nil {
 		return err
 	}
-	req, err := client.Put(fmt.Sprintf("2.0/repositories/%s/environments/%s",
+	req, err := client.Put(fmt.Sprintf("2.0/repositories/%s/%s/environments/%s",
+		d.Get("owner").(string),
 		d.Get("repository").(string),
 		d.Get("uuid").(string),
 	), bytes.NewBuffer(bytedata))
@@ -161,7 +170,8 @@ func resourceDeploymentUpdate(d *schema.ResourceData, m interface{}) error {
 
 func resourceDeploymentDelete(d *schema.ResourceData, m interface{}) error {
 	client := m.(*Client)
-	_, err := client.Delete(fmt.Sprintf("2.0/repositories/%s/environments/%s",
+	_, err := client.Delete(fmt.Sprintf("2.0/repositories/%s/%s/environments/%s",
+		d.Get("owner").(string),
 		d.Get("repository").(string),
 		d.Get("uuid").(string),
 	))
