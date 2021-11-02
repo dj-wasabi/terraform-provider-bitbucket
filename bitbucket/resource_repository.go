@@ -93,7 +93,7 @@ func resourceRepository() *schema.Resource {
 			"pipelines_enabled": {
 				Type:     schema.TypeBool,
 				Optional: true,
-				Default:  true,
+				Default:  false,
 			},
 			"fork_policy": {
 				Type:     schema.TypeString,
@@ -178,11 +178,11 @@ func resourceRepositoryUpdate(d *schema.ResourceData, m interface{}) error {
 		return err
 	}
 
-	_, err = client.Put(fmt.Sprintf("2.0/repositories/%s/%s/pipelines_config",
+	enablePipeline, err := client.Put(fmt.Sprintf("2.0/repositories/%s/%s/pipelines_config",
 		d.Get("owner").(string),
 		repoSlug), bytes.NewBuffer(bytedata))
 
-	if err != nil {
+	if err != nil && enablePipeline.StatusCode != 404 {
 		return err
 	}
 	return resourceRepositoryRead(d, m)
@@ -224,11 +224,11 @@ func resourceRepositoryCreate(d *schema.ResourceData, m interface{}) error {
 		return err
 	}
 
-	_, err = client.Put(fmt.Sprintf("2.0/repositories/%s/%s/pipelines_config",
+	enablePipeline, err := client.Put(fmt.Sprintf("2.0/repositories/%s/%s/pipelines_config",
 		d.Get("owner").(string),
 		repoSlug), bytes.NewBuffer(bytedata))
 
-	if err != nil {
+	if err != nil && enablePipeline.StatusCode != 404 {
 		return err
 	}
 
@@ -297,6 +297,7 @@ func resourceRepositoryRead(d *schema.ResourceData, m interface{}) error {
 			d.Get("owner").(string),
 			repoSlug))
 
+		// pipelines_config returns 404 if they've never been enabled for the project
 		if err != nil && pipelinesConfigReq.StatusCode != 404 {
 			return err
 		}
@@ -318,7 +319,6 @@ func resourceRepositoryRead(d *schema.ResourceData, m interface{}) error {
 		} else if pipelinesConfigReq.StatusCode == 404 {
 			d.Set("pipelines_enabled", false)
 		}
-
 	}
 
 	return nil
