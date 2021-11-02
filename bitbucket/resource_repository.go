@@ -316,7 +316,7 @@ func resourceRepositoryRead(d *schema.ResourceData, m interface{}) error {
 
 			d.Set("pipelines_enabled", pipelinesConfig.Enabled)
 		} else if pipelinesConfigReq.StatusCode == 404 {
-			d.Set("pipelines_enabled", true)
+			d.Set("pipelines_enabled", false)
 		}
 
 	}
