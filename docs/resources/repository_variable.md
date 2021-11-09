@@ -14,16 +14,12 @@ This resource allows you to setup pipelines variables to manage your builds with
 # Example Usage
 
 ```hcl
-resource "bitbucket_repository" "monorepo" {
-    owner = "gob"
-    name = "illusions"
-    pipelines_enable = true
-}
 
 resource "bitbucket_repository_variable" "debug" {
     key = "DEBUG"
     value = "true"
-    repository = "${bitbucket_repository.monorepo.id}"
+    owner      = "myteam"
+    repository = "terraform-code"
     secured = false
 }
 ```
@@ -32,6 +28,8 @@ resource "bitbucket_repository_variable" "debug" {
 
 * `key` - (Required) The key of the key value pair
 * `value` - (Required) The value of the key
+* `owner` - (Required) The owner of this repository. Can be you or any team you
+  have write access to.
 * `repository` - (Required) The repository ID you want to put this variable onto.
 * `secured` - (Optional) If you want to make this viewable in the UI.
 

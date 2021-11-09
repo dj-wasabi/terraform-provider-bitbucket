@@ -33,6 +33,11 @@ func resourceRepositoryVariable() *schema.Resource {
 		Delete: resourceRepositoryVariableDelete,
 
 		Schema: map[string]*schema.Schema{
+			"owner": {
+				Type:     schema.TypeString,
+				Required: true,
+				ForceNew: true,
+			},
 			"uuid": {
 				Type:     schema.TypeString,
 				Computed: true,
@@ -82,7 +87,8 @@ func resourceRepositoryVariableCreate(d *schema.ResourceData, m interface{}) err
 	if err != nil {
 		return err
 	}
-	req, err := client.Post(fmt.Sprintf("2.0/repositories/%s/pipelines_config/variables/",
+	req, err := client.Post(fmt.Sprintf("2.0/repositories/%s/%s/pipelines_config/variables/",
+		d.Get("owner").(string),
 		d.Get("repository").(string),
 	), bytes.NewBuffer(bytedata))
 
@@ -111,7 +117,8 @@ func resourceRepositoryVariableCreate(d *schema.ResourceData, m interface{}) err
 func resourceRepositoryVariableRead(d *schema.ResourceData, m interface{}) error {
 
 	client := m.(*Client)
-	rvReq, _ := client.Get(fmt.Sprintf("2.0/repositories/%s/pipelines_config/variables/%s",
+	rvReq, _ := client.Get(fmt.Sprintf("2.0/repositories/%s/%s/pipelines_config/variables/%s",
+		d.Get("owner").(string),
 		d.Get("repository").(string),
 		d.Get("uuid").(string),
 	))
@@ -162,7 +169,8 @@ func resourceRepositoryVariableUpdate(d *schema.ResourceData, m interface{}) err
 	if err != nil {
 		return err
 	}
-	req, err := client.Put(fmt.Sprintf("2.0/repositories/%s/pipelines_config/variables/%s",
+	req, err := client.Put(fmt.Sprintf("2.0/repositories/%s/%s/pipelines_config/variables/%s",
+		d.Get("owner").(string),
 		d.Get("repository").(string),
 		d.Get("uuid").(string),
 	), bytes.NewBuffer(bytedata))
@@ -181,7 +189,8 @@ func resourceRepositoryVariableUpdate(d *schema.ResourceData, m interface{}) err
 
 func resourceRepositoryVariableDelete(d *schema.ResourceData, m interface{}) error {
 	client := m.(*Client)
-	_, err := client.Delete(fmt.Sprintf(fmt.Sprintf("2.0/repositories/%s/pipelines_config/variables/%s",
+	_, err := client.Delete(fmt.Sprintf(fmt.Sprintf("2.0/repositories/%s/%s/pipelines_config/variables/%s",
+		d.Get("owner").(string),
 		d.Get("repository").(string),
 		d.Get("uuid").(string),
 	)))
